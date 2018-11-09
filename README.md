@@ -19,4 +19,5 @@ Rudnik is a vDinar adaption of the [original Stratum Mining protocol](https://gi
 * Adaption to vDinar blockchain and rewards structure made by AndreaDejanGrande
 
 **License**
+
 This software is provided AS-IS without any warranties of any kind. Please use at your own risk.
