@@ -244,16 +244,12 @@ class TemplateRegistry(object):
         # 1. Build coinbase
         coinbase_bin = job.serialize_coinbase(extranonce1_bin, extranonce2_bin)
         coinbase_hash = util.doublesha(coinbase_bin)
-        # print('Cb hash: ' + binascii.hexlify(coinbase_hash))
         donations_coinbase_bin = job.serialize_donations_coinbase(extranonce1_bin, extranonce2_bin)
         donations_coinbase_hash = util.doublesha(donations_coinbase_bin)
-        # print('Don. cb hash: ' + binascii.hexlify(donations_coinbase_hash))
         
         # 2. Calculate merkle root
         merkle_root_bin = job.merkletree.withFirstTwo(coinbase_hash, donations_coinbase_hash)
-        # print('Merkle root bin: ' + merkle_root_bin)
         merkle_root_int = util.uint256_from_str(merkle_root_bin)
-        # print('Merkle root int: ' + str(merkle_root_int))
                 
         # 3. Serialize header with given merkle, ntime and nonce
         header_bin = job.serialize_header(merkle_root_int, ntime_bin, nonce_bin)
