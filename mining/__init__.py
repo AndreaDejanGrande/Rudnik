@@ -32,12 +32,12 @@ def setup(on_startup):
     
     bitcoin_rpc = BitcoinRPCManager()
     
-    # Check litecoind
+    # Check vdinard
     #         Check we can connect (sleep)
     # Check the results:
     #         - getblocktemplate is avalible        (Die if not)
     #         - we are not still downloading the blockchain        (Sleep)
-    log.info("Connecting to litecoind...")
+    log.info("Connecting to vdinard...")
     while True:
         try:
             result = (yield bitcoin_rpc.check_submitblock())
@@ -58,7 +58,7 @@ def setup(on_startup):
         try:
             result = (yield bitcoin_rpc.getblocktemplate())
             if isinstance(result, dict):
-                # litecoind implements version 1 of getblocktemplate
+                # vdinard implements version 1 of getblocktemplate
                 if result['version'] >= 1:
                     result = (yield bitcoin_rpc.getdifficulty())
                     if isinstance(result,dict):

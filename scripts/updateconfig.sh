@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Send notification to Stratum mining instance add a new litecoind instance to the pool
+# Send notification to Stratum mining instance add a new vdinard instance to the pool
 
 import socket
 import json

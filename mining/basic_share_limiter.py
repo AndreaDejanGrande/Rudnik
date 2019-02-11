@@ -69,19 +69,19 @@ class BasicShareLimiter(object):
         self.tmin = self.target - self.variance
         self.tmax = self.target + self.variance
         self.buffersize = self.retarget / self.target * 4
-        self.litecoin = {}
-        self.litecoin_diff = 100000000 # TODO: Set this to VARDIFF_MAX
+        self.vdinar = {}
+        self.vdinar_diff = 100000000 # TODO: Set this to VARDIFF_MAX
         # TODO: trim the hash of inactive workers
 
     @defer.inlineCallbacks
-    def update_litecoin_difficulty(self):
-        # Cache the litecoin difficulty so we do not have to query it on every submit
+    def update_vdinar_difficulty(self):
+        # Cache the vDinar difficulty so we do not have to query it on every submit
         # Update the difficulty  if it is out of date or not set
-        if 'timestamp' not in self.litecoin or self.litecoin['timestamp'] < int(time.time()) - settings.DIFF_UPDATE_FREQUENCY:
-            self.litecoin['timestamp'] = time.time()
-            self.litecoin['difficulty'] = (yield Interfaces.template_registry.bitcoin_rpc.getdifficulty())
-            log.debug("Updated litecoin difficulty to %s" %  (self.litecoin['difficulty']))
-        self.litecoin_diff = self.litecoin['difficulty']
+        if 'timestamp' not in self.vdinar or self.vdinar['timestamp'] < int(time.time()) - settings.DIFF_UPDATE_FREQUENCY:
+            self.vdinar['timestamp'] = time.time()
+            self.vdinar['difficulty'] = (yield Interfaces.template_registry.bitcoin_rpc.getdifficulty())
+            log.debug("Updated vDinar difficulty to %s" %  (self.vdinar['difficulty']))
+        self.vdinar_diff = self.vdinar['difficulty']
 
     def submit(self, connection_ref, job_id, current_difficulty, timestamp, worker_name):
         ts = int(timestamp)
@@ -133,10 +133,10 @@ class BasicShareLimiter(object):
             # For fractional 0.1 ddiff's just up by 1
             if settings.VDIFF_X2_TYPE:
                 ddiff = 2
-                # Don't go above LITECOIN or VDIFF_MAX_TARGET            
+                # Don't go above vDINAR or VDIFF_MAX_TARGET            
                 if settings.USE_COINDAEMON_DIFF:
-                    self.update_litecoin_difficulty()
-                    diff_max = min([settings.VDIFF_MAX_TARGET, self.litecoin_diff])
+                    self.update_vdinar_difficulty()
+                    diff_max = min([settings.VDIFF_MAX_TARGET, self.vdinar_diff])
                 else:
                     diff_max = settings.VDIFF_MAX_TARGET
 
@@ -145,10 +145,10 @@ class BasicShareLimiter(object):
             else:
                 if ddiff < 1:
                    ddiff = 1
-                # Don't go above LITECOIN or VDIFF_MAX_TARGET
+                # Don't go above vDINAR or VDIFF_MAX_TARGET
                 if settings.USE_COINDAEMON_DIFF:
-                   self.update_litecoin_difficulty()
-                   diff_max = min([settings.VDIFF_MAX_TARGET, self.litecoin_diff])
+                   self.update_vdinar_difficulty()
+                   diff_max = min([settings.VDIFF_MAX_TARGET, self.vdinar_diff])
                 else:
                    diff_max = settings.VDIFF_MAX_TARGET
 
